@@ -37,6 +37,10 @@ CONFIG_ABS_FILE = CONFIG_PATH + "/" + CONFIG_FILE
 CRYP_MOUNT_METHOD = "cryfs"
 CRYP_UNMOUNT_METHOD = "cryfs-unmount"
 
+DIRNAME = os.path.dirname(__file__)
+ABSOLUTE_ICON_PATH = os.path.join(DIRNAME, ICON)
+print(ABSOLUTE_ICON_PATH)
+
 
 class LoadNewEnc(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -119,7 +123,6 @@ class MountsWin(QMainWindow):
         key_enc_name = self.enc_name.currentText()
         enc_folder, mount_point = self.dict_encs[key_enc_name]
         command = f"{CRYP_MOUNT_METHOD} {enc_folder} {mount_point}"
-        print(self.password.text())
         password = self.password.text()
         child = pexpect.spawn(command)
         child.expect("Password:")
@@ -161,7 +164,7 @@ class MainWin(QMainWindow):
         app = QApplication([])
         app.setQuitOnLastWindowClosed(False)
         # Create the icon
-        icon = QIcon(ICON)
+        icon = QIcon(ABSOLUTE_ICON_PATH)
         # Create the tray
         tray = QSystemTrayIcon()
         tray.setIcon(icon)
