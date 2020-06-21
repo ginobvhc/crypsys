@@ -39,7 +39,6 @@ CRYP_UNMOUNT_METHOD = "cryfs-unmount"
 
 DIRNAME = os.path.dirname(__file__)
 ABSOLUTE_ICON_PATH = os.path.join(DIRNAME, ICON)
-print(ABSOLUTE_ICON_PATH)
 
 
 class LoadNewEnc(QMainWindow):
@@ -84,7 +83,6 @@ class LoadNewEnc(QMainWindow):
         enc_mount_name_dir = self.enc_mount_name.text()
         name = enc_name_dir.split("/")[-1]
         config[name] = [enc_name_dir, enc_mount_name_dir]
-        print(config)
         save_config(config)
         self.close()
 
@@ -127,18 +125,13 @@ class MountsWin(QMainWindow):
         child = pexpect.spawn(command)
         child.expect("Password:")
         child.sendline(password)
-        print(child.before)
-        loading = child.expect("Deriving .*")
-        error = child.expect("Error 11: .*")
-        print(error)
-        print(loading)
-        if error == 0:
-            print("Wrong password")
+        message = child.expect(["Error 11: .*", "Deriving .*"])
+        if message == 0:
             self.statusBar().showMessage("Wrong Password")
         else:
             print("Password ok mounted")
             self.statusBar().showMessage("Mounted {key_enc_name}")
-        print(command)
+        child.close()
 
     def unmount_enc(self):
         print("trigger unmount")
